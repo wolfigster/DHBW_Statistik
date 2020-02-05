@@ -1,16 +1,37 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'de.wolfig'
 version '1.0'
 
+mainClassName = 'Main'
+
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task fullJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'statistics',
+                'Implementation-Version': version,
+                'Main-Class': 'de.wolfig.Main'
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
 }

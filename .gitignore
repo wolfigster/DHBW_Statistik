@@ -1,0 +1,10 @@
+# Gradle files
+.gradle/
+build/
+
+# IntelliJ IDEA project files
+.idea/
+/*/out/
+
+src/main/web/eu/testing-only/config.php
+src/main/java/de/wolfig/database/Config.java

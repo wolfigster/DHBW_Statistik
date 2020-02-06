@@ -49,6 +49,24 @@ public class MySQL {
         }
     }
 
+    public static void createTable(String table, String columns) {
+        connection = getInstance();
+        if(connection != null) {
+            try {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("CREATE TABLE IF NOT EXISTS ").append(table).append(" (ID int(11) NOT NULL AUTO_INCREMENT, ");
+                stringBuilder.append(columns.replace(", ", " VARCHAR(30) NOT NULL, "));
+                stringBuilder.append("PRIMARY KEY (ID));");
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(stringBuilder.toString());
+                System.out.println("Table created with command: " + stringBuilder.toString());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     public static void createData(String sql) {
         connection = getInstance();
         if(connection != null) {

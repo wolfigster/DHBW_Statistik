@@ -1,6 +1,8 @@
 package de.wolfig;
 
 import de.wolfig.database.MySQL;
+import de.wolfig.sascha.MachinesSeparator;
+import de.wolfig.sascha.OneTableMaker;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -16,7 +18,17 @@ public class Main {
 
     public static void main(String[] args) {
         if(args.length == 1) {
-            createDatabaseFromFile(args[0]);
+            //createDatabaseFromFile(args[0]);
+            if(args[0].equals("ms")) {
+                MachinesSeparator.start();
+                System.out.println();
+            } else if(args[0].equals("otm")) {
+                try {
+                    OneTableMaker.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         if(args.length == 2) {
             test(args[0], Integer.parseInt(args[1]));

@@ -18,7 +18,7 @@ public class OneTableMaker
 {
     public static void start() throws IOException
     {
-        File f = new File("EinzelneMaschinen");
+        File f = new File("machines");
         File[] fileArray = f.listFiles();
         boolean newDoc = true;
         String[] documente = new String[131];
@@ -38,7 +38,7 @@ public class OneTableMaker
                     in = new BufferedReader(new FileReader(oneFile.toString()));
                     String zeile = null;
                     String maschinenName = oneFile.toString().replaceAll(".csv","");
-                    bw.write(maschinenName.replaceAll("EinzelneMaschinen\\\\", ""));
+                    bw.write(maschinenName.replaceAll("machines\\\\", ""));
                     while ((zeile = in.readLine()) != null)
                     {
                         bw.write(zeile + ";");

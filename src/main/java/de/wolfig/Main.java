@@ -3,6 +3,7 @@ package de.wolfig;
 import de.wolfig.database.MySQL;
 import de.wolfig.sascha.MachinesSeparator;
 import de.wolfig.sascha.OneTableMaker;
+import de.wolfig.sascha.Testing;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -20,11 +21,11 @@ public class Main {
         if(args.length == 1) {
             //createDatabaseFromFile(args[0]);
             if(args[0].equals("ms")) {
-                MachinesSeparator.start();
-                System.out.println();
+                Testing.start();
+                System.out.println("TTT");
             } else if(args[0].equals("otm")) {
                 try {
-                    OneTableMaker.start();
+                    Testing.starTBt();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

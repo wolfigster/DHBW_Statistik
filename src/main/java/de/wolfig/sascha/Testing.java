@@ -1,17 +1,11 @@
 package de.wolfig.sascha;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Scanner;
 
-public class MachinesSeparator
+public class Testing
 {
     public static void start()
     {
@@ -186,69 +180,21 @@ public class MachinesSeparator
         int column = Integer.parseInt(readString());
         String columnName = "";
         File file = new File(fileName);
-        boolean firstRow = true;
-        
-        if (!file.canRead() || !file.isFile())
+
+        if (!file.canRead() || !file.isFile()) {
             System.out.println("Can't find file " + fileName);
             System.exit(0);
+        }
 
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(fileName));
-            int number = 0;
-            String row = null;
-            while ((row = in.readLine()) != null)
-            {
-                if(firstRow)
-                {
-                    firstRow = false;
-                } else {
-                    char[] charArray = row.toCharArray();
-                    ArrayList<Character> maschinenbezeichnungChar = new ArrayList<>();
-                    for(int i = 0; charArray[i] != '|'; i++)
-                    {
-                        maschinenbezeichnungChar.add(charArray[i]);
-                    }
-                    String maschinenbezeichnungString = "";
-                    for(char c : maschinenbezeichnungChar)
-                    {
-                        maschinenbezeichnungString = maschinenbezeichnungString + c; 
-                    }
-                    //System.out.print(maschinenbezeichnungString + ": "); //Name der Maschine
-
-                    ArrayList<Character> einzufuegenderChar = new ArrayList<>();
-                    int j = 0;
-                    for(int i = 0; i < charArray.length; i++)
-                    {
-                        if(j<column && charArray[i] == '|')
-                        {
-                            j++;
-                        }
-                        else if(charArray[i] == '|')
-                        {
-                            break;
-                        }
-                        else if(j>=column)
-                        {
-                            einzufuegenderChar.add(charArray[i]);
-                        }
-                    }
-                    String einzufuegenderText = "";
-                    for(char c : einzufuegenderChar)
-                    {
-                        einzufuegenderText = einzufuegenderText + c; 
-                    }
-                    //System.out.print(einzufuegenderText + "\n"); //Ausgewählte Spalte der Maschine
-                    if(firstRow)
-                    {
-                        columnName = einzufuegenderText;
-                        firstRow = false;
-                    } else {
-                        writeInTxt(maschinenbezeichnungString, einzufuegenderText);
-                    }
-                }
+            String row = in.readLine();
+            while ((row = in.readLine()) != null) {
+                String[] rowData = row.split("\\|");
+                writeToCSV(rowData[0], rowData[column]);
             }
-            System.out.println(number + " files were created");
+            System.out.println("finished");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -256,30 +202,82 @@ public class MachinesSeparator
                 try {
                     in.close();
                 } catch (IOException e) {
+                    e.printStackTrace();
                 }
         }
     }
-    
-    public static void writeInTxt(String maschinenbezeichnung, String einzufuegenderText)
+
+    public static void writeToCSV(String machineName, String data)
     {
         final Logger logger = Logger.getLogger("test");
         try {
-                File file = new File("EinzelneMaschinen/"+maschinenbezeichnung+".csv");
-                try (FileWriter writer = new FileWriter(file, true))
-                {
-                    writer.write("\n"+einzufuegenderText);
-                    writer.flush();
-                }
-            }
-            catch (IOException ex)
+            File file = new File("machines/"+machineName+".csv");
+            try (FileWriter writer = new FileWriter(file, true))
             {
-                logger.log(Level.WARNING, ex.getLocalizedMessage());
+                writer.write("\n"+data);
+                writer.flush();
             }
+        }
+        catch (IOException ex)
+        {
+            logger.log(Level.WARNING, ex.getLocalizedMessage());
+        }
     }
-    
+
     private static String readString()
     {
         Scanner scan = new Scanner( System.in );
         return scan.nextLine();
+    }
+
+
+    public static void starTBt() throws IOException
+    {
+        File f = new File("machines");
+        File[] fileArray = f.listFiles();
+        String[][] docs = new String[131][119630];
+        FileWriter fw = new FileWriter("table.csv");
+        BufferedWriter bw = new BufferedWriter(fw);
+        int i = 0;
+        for(File oneFile : fileArray) {
+            File file = new File(fileArray[i].toString());
+
+            if (!file.canRead() || !file.isFile())
+                System.exit(0);
+
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new FileReader(fileArray[i].toString()));
+                String row = null;
+                docs[i][0] = fileArray[i].toString().replaceAll(".csv","").replaceAll("machines\\\\", "") + ";";
+                for(int a = 1; a <= 119629; a++) {
+                    if((row = in.readLine()) != null) {
+                        docs[i][a] = row + ";";
+                    } else {
+                        docs[i][a] = ";";
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (in != null)
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                    }
+            }
+            docs[i][1] = String.valueOf(i) + ";";
+            i++;
+            System.out.println("Document " + i + " was added to the docs");
+        }
+
+        for(int y = 0; y <= 119629; y++) {
+            for(int x = 0; x <= 130; x++) {
+                bw.write(docs[x][y]);
+            }
+            bw.newLine();
+        }
+
+        bw.close();
     }
 }
